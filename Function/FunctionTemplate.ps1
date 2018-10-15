@@ -1,7 +1,6 @@
-﻿<%
+<%
 "function $PLASTER_PARAM_FunctionName"
-%>
-{
+%>{
 <%
     If ($PLASTER_PARAM_Help -eq 'Yes')
     {
@@ -13,6 +12,8 @@
       Long description
     .EXAMPLE
       Example of how to use this cmdlet
+    .NOTES
+      Created By:OH
   #>
 "@
     }
@@ -51,32 +52,33 @@
     }
 %>
     )
+
 <%
     if ($PLASTER_PARAM_PipelineSupport -eq 'Yes')
     {
         @'
-    begin
-    {
+    begin {
+
     }
-    process
-    {
+
+    process {
 '@
     }
+
 %>
 <%
     if ($PLASTER_PARAM_ComputerName -eq 'Yes' -and $PLASTER_PARAM_PipelineSupport -eq 'Yes')
     {
         @'
-        forEach ($computer in $ComputerName)
-        {
+        forEach ($computer in $ComputerName) {
+
         }
 '@
     }
     elseif ($PLASTER_PARAM_ComputerName -eq 'Yes') 
     {
     @'
-    forEach ($computer in $ComputerName)
-    {
+    forEach ($computer in $ComputerName) {    
     }
 '@
     }
@@ -86,8 +88,9 @@
     {
         @'
     }
-    end
-    {
+
+    end {
+
     }
 '@
     }
