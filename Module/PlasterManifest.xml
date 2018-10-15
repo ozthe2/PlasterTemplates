@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<plasterManifest
+  schemaVersion="1.1"
+  templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
+  <metadata>
+    <name>plasterManifestOH</name>
+    <id>83d0e660-5e05-4b59-8d81-782b02bb5e87</id>
+    <version>1.0.0</version>
+    <title>OH Custom Module Template</title>
+    <description>Plaster template to create a module</description>
+    <author>OH</author>
+    <tags></tags>
+  </metadata>
+        <parameters>
+                <parameter name='ModuleAuthor' type = 'user-fullname' prompt='Author' />
+                <parameter name='ModuleName' type = 'text' prompt='Name of your module' />
+                <parameter name='ModuleVersion' type = 'text' prompt='Version Number' default='0.0.0.1' />
+                <parameter name='ModuleDesc' type = 'text' prompt='Brief Description of your module' />                
+                <parameter name='Pester' type = 'choice' prompt='Include Pester Tests?' default='0'>
+                        <choice label='&amp;Yes' value='Yes' help='Adds a tests folder'/>
+                        <choice label='&amp;No' value='No' help='Does not add a tests folder'/>
+                </parameter>
+                <parameter name='Git' type = 'choice' prompt='Include GIT Support?' default='0'>
+                        <choice label='&amp;Yes' value='Yes' help='Includes Git files'/>
+                        <choice label='&amp;No' value='No' help='Does not include git files'/>
+                </parameter>                
+                <parameter name='PlatyPS' type = 'choice' prompt='Include PlatyPS' default='0'>
+                        <choice label='&amp;Yes' value='Yes' help='Adds a PlatyPS for help'/>
+                        <choice label='&amp;No' value='No' help='Does not add PlatyPS support'/>
+                </parameter>
+        </parameters>
+        <content>                
+                <message>Creating your folders for module: </message>
+                <file source='' destination='${PLASTER_PARAM_ModuleName}\' />
+                <file source='' destination='.\Docs' />
+                <file source='' destination='.\Media' />
+                <file source='' destination='$PLASTER_PARAM_ModuleName\Private' />
+                <file source='' destination='$PLASTER_PARAM_ModuleName\Public' />
+                <message>Setting up your project</message>
+                <newModuleManifest destination='${PLASTER_PARAM_ModuleName}\${PLASTER_PARAM_ModuleName}.psd1' moduleVersion='$PLASTER_PARAM_ModuleVersion' rootModule='${PLASTER_PARAM_ModuleName}.psm1' author='$PLASTER_PARAM_ModuleAuthor' description='$PLASTER_PARAM_ModuleDesc'/>
+                <templateFile source='template.psm1' destination='${PLASTER_PARAM_ModuleName}\${PLASTER_PARAM_ModuleName}.psm1'/>                
+                <message condition='$PLASTER_PARAM_Pester -eq "Yes"'>Setting up support for Pester</message>
+                <requireModule name="Pester" minimumVersion="3.4.0" condition='$PLASTER_PARAM_Pester -eq "Yes"'/>
+                <file source='' destination='.\Tests\' condition='$PLASTER_PARAM_Pester -eq "Yes"'/>
+                <file source='basicTest.ps1' destination='.\Tests\${PLASTER_PARAM_ModuleName}.tests.ps1' condition='$PLASTER_PARAM_Pester -eq "Yes"'/>
+                <message condition='$PlASTER_PARAM_Git -eq "Yes"'>Setting up support for Git</message>
+                <templateFile source='README.md' destination='.\README.md' condition='$PLASTER_PARAM_Git -eq "Yes"'/>
+                <templateFile source='LICENSE' destination='.\LICENSE' condition='$PLASTER_PARAM_Git -eq "Yes"'/>
+                <file source='.gitignore' destination='.\.gitignore' condition='$PlASTER_PARAM_Git -eq "Yes"'/>
+                <message condition='$PLASTER_PARAM_PlatyPS -eq "Yes"'>Setting up support for PlatyPS</message>
+                <requireModule name="PlatyPS" condition='$PLASTER_PARAM_PlatyPS -eq "Yes"'/>
+                <file source='' destination='$PLASTER_PARAM_ModuleName\en-US' condition='$PLASTER_PARAM_PlatyPS -eq "Yes"'/>
+        </content>
+</plasterManifest>
